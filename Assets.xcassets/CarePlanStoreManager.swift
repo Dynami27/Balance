@@ -9,9 +9,12 @@
 import CareKit
 import ResearchKit
 
+protocol CarePlanStoreManagerDelegate: class {
+    func carePlanStore(_: OCKCarePlanStore, didUpdateInsights insights: [OCKInsightItem])
+}
 class CarePlanStoreManager: NSObject {
     var store: OCKCarePlanStore
-    
+    weak var delegate: CarePlanStoreManagerDelegate?
     static let sharedCarePlanStoreManager = CarePlanStoreManager()
     
     override init() {
@@ -19,6 +22,8 @@ class CarePlanStoreManager: NSObject {
         guard let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).last else {
             fatalError("Failed to obtain Documents directory!")
         }
+        
+        
         
         let storeURL = documentDirectory.appendingPathComponent("CarePlanStore")
         
@@ -28,23 +33,29 @@ class CarePlanStoreManager: NSObject {
     
         store = OCKCarePlanStore(persistenceDirectoryURL: storeURL)
         super.init()
+        store.delegate = self
     }
     func buildCarePlanResultFrom(taskResult: ORKTaskResult) -> OCKCarePlanEventResult {
-        // 1
         guard let firstResult = taskResult.firstResult as? ORKStepResult,
             let stepResult = firstResult.results?.first else {
                 fatalError("Unexepected task results")
         }
-        
-        // 2
         if let numericResult = stepResult as? ORKNumericQuestionResult,
             let answer = numericResult.numericAnswer {
             return OCKCarePlanEventResult(valueString: answer.stringValue, unitString: numericResult.unit, userInfo: nil)
         }
-        
-        // 3
         fatalError("Unexpected task result type")
     }
+
+func updateInsights() {
+    InsightsDataManager().updateInsights { (success, insightItems) in
+        guard let insightItems = insightItems, success else { return }
+        self.delegate?.carePlanStore(self.store, didUpdateInsights: insightItems)
+    }
 }
-
-
+}
+extension CarePlanStoreManager: OCKCarePlanStoreDelegate {
+    func carePlanStore(_ store: OCKCarePlanStore, didReceiveUpdateOf event: OCKCarePlanEvent) {
+        updateInsights()
+    }
+}

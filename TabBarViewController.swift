@@ -14,11 +14,16 @@ class TabBarViewController: UITabBarController {
   
     fileprivate let carePlanStoreManager = CarePlanStoreManager.sharedCarePlanStoreManager
     fileprivate let carePlanData: CarePlanData
-    fileprivate var pedometerTrackerViewController: OCKSymptomTrackerViewController? = nil
+    fileprivate var symptomTrackerViewController: OCKSymptomTrackerViewController? = nil
+    fileprivate var insightsViewController: OCKInsightsViewController? = nil
     
     required init?(coder aDecoder: NSCoder){
         carePlanData = CarePlanData(carePlanStore: carePlanStoreManager.store)
         super.init(coder:aDecoder)
+        
+        carePlanStoreManager.delegate = self
+        carePlanStoreManager.updateInsights()
+        
         let careCardStack = createCareCardStack()
         let symptomTrackerStack = createSymptomTrackerStack()
         let insightsStack = createInsightsStack()
@@ -28,7 +33,6 @@ class TabBarViewController: UITabBarController {
                                 symptomTrackerStack,
                                 insightsStack,
                                 connectStack]
-      
         
         tabBar.tintColor = UIColor.darkOrange()
         tabBar.barTintColor = UIColor.lightGreen()
@@ -36,30 +40,42 @@ class TabBarViewController: UITabBarController {
 
     fileprivate func createCareCardStack() -> UINavigationController {
         let viewController = OCKCareCardViewController(carePlanStore: carePlanStoreManager.store)
-        viewController.maskImage = UIImage(named: "heart")
+        viewController.maskImage = UIImage(named: "firstaid")
         viewController.smallMaskImage = UIImage(named: "small-heart")
-         viewController.maskImageTintColor = UIColor.darkGreen()
+        viewController.maskImageTintColor = UIColor.red
+        viewController.tabBarItem = UITabBarItem(title: "UpRight Training", image: UIImage(named: "checkmark"), selectedImage: UIImage(named: "checkmark"))
+        viewController.title = "UpRight Training"
+        viewController.view.backgroundColor = UIColor.darkYellow()
         return UINavigationController(rootViewController: viewController)
     }
+    
+    
     fileprivate func createSymptomTrackerStack() -> UINavigationController {
     let viewController = OCKSymptomTrackerViewController(carePlanStore: carePlanStoreManager.store)
         viewController.delegate = self
         viewController.progressRingTintColor = UIColor.darkGreen()
         
         
-        viewController.tabBarItem = UITabBarItem(title: "Symptom Tracker", image: UIImage(named: "symptoms"), selectedImage: UIImage.init(named: "symptoms-filled"))
-        viewController.title = "Symptom Tracker"
+        viewController.tabBarItem = UITabBarItem(title: "Balance Assessment", image: UIImage(named: "barbell"), selectedImage: UIImage.init(named: "barbell.png"))
+        viewController.title = "Balance Assessment"
    return UINavigationController(rootViewController: viewController)
         
  }
    fileprivate func createInsightsStack() -> UINavigationController {
-     let viewController = UIViewController()
+    let viewController = OCKInsightsViewController(insightItems: [OCKInsightItem.emptyInsightsMessage()],
+    headerTitle: "UpRight Progress", headerSubtitle: "")
+    insightsViewController = viewController
     
+    viewController.tabBarItem = UITabBarItem(title: "Insights", image: UIImage(named: "LineChart"), selectedImage: UIImage.init(named: "Line Chart"))
+    viewController.title = "Insights"
     return UINavigationController(rootViewController: viewController)
     }
+    
     fileprivate func createConnectStack() -> UINavigationController {
        let viewController = UIViewController()
         
+        viewController.tabBarItem = UITabBarItem(title: "Show off", image: UIImage(named: "LikeIt"), selectedImage: UIImage.init(named: "LikeIt"))
+        viewController.title = "Show off"
     return UINavigationController(rootViewController: viewController)
     }
   }
@@ -68,7 +84,7 @@ extension TabBarViewController: OCKSymptomTrackerViewControllerDelegate {
     func symptomTrackerViewController(_ viewController: OCKSymptomTrackerViewController,
                                       didSelectRowWithAssessmentEvent assessmentEvent: OCKCarePlanEvent) {
         guard let userInfo = assessmentEvent.activity.userInfo,
-            let task: ORKTask = userInfo["ORKTask"] as? ORKTask else { return }
+        let task: ORKTask = userInfo["ORKTask"] as? ORKTask else { return }
         
         let taskViewController = ORKTaskViewController(task: task, taskRun: nil)
         taskViewController.delegate = self
@@ -76,6 +92,7 @@ extension TabBarViewController: OCKSymptomTrackerViewControllerDelegate {
         present(taskViewController, animated: true, completion: nil)
     }
 }
+
 // MARK: - ORKTaskViewControllerDelegate
 extension TabBarViewController: ORKTaskViewControllerDelegate {
     func taskViewController(_ taskViewController: ORKTaskViewController, didFinishWith
@@ -85,17 +102,12 @@ extension TabBarViewController: ORKTaskViewControllerDelegate {
             dismiss(animated: true, completion: nil)
         }
         
-        
-        guard let symptomTrackerViewController = createSymptomTrackerStack().viewControllers.first as? OCKSymptomTrackerViewController else {
-            fatalError("Unable to create OCKSymptomTrackerViewController ")
-        }
-        
-        
-        guard reason == .completed else { return }
-      
-        let event = symptomTrackerViewController.lastSelectedAssessmentEvent
+       guard reason == .completed else { return }
+       guard let symptomTrackerViewController = symptomTrackerViewController,
+        let event = symptomTrackerViewController.lastSelectedAssessmentEvent else { return }
+       
         let carePlanResult = carePlanStoreManager.buildCarePlanResultFrom(taskResult: taskViewController.result)
-        carePlanStoreManager.store.update(event!, with: carePlanResult, state: .completed) {
+        carePlanStoreManager.store.update(event,with:carePlanResult,state:.completed) {
             success, _, error in
             if !success {
                 print(error?.localizedDescription)
@@ -103,4 +115,9 @@ extension TabBarViewController: ORKTaskViewControllerDelegate {
         }
     }
 }
-  
+// MARK: - CarePlanStoreManagerDelegate
+extension TabBarViewController: CarePlanStoreManagerDelegate {
+    func carePlanStore(_ store: OCKCarePlanStore, didUpdateInsights insights: [OCKInsightItem]) {
+        insightsViewController?.items = insights
+    }
+}
