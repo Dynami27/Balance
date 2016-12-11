@@ -16,6 +16,7 @@ enum ActivityIdentifer : String {
   case exerciseTwo = "Heel to toe walk"
   case exerciseThree = "Balance Walk"
   case timedWalk
+  case timedWalkTest
     
     }
 
@@ -60,23 +61,22 @@ class CarePlanData: NSObject {
             text: " Repeat for 20 steps, Alternating feet",
             tintColor: UIColor.red,
             instructions: "1.Raise arms to sides, shoulder height. 2.Choose a spot ahead of you and focus on it to keep you steady as you walk 3.Walk in a straight line with one foot in front of the other. 4. As you walk, lift your back leg. Pause for 1 second before stepping forward 5. Repeat for 20 steps, alternating legs.",
-            imageURL: NSURL.fileURL(withPath:"balancewalk.jpg"),
+            imageURL: NSURL.fileURL(withPath: "balancewalk.jpg"),
             schedule:CarePlanData.dailyScheduleRepeating(occurencesPerDay: 3),
             resultResettable: true,
             userInfo: nil)
        
         let timedwalkActivity = OCKCarePlanActivity
-            .assessment(withIdentifier: ActivityIdentifer.timedWalk.rawValue,
-                        groupIdentifier: nil,
-                        title: " Timed Walk",
-                        text: "Timed Walk assessment",
-                        tintColor: UIColor.blue,
+        .assessment(withIdentifier: ActivityIdentifer.timedWalk.rawValue,
+                      groupIdentifier: nil,
+                      title: " Timed Walk",
+                      text: "Timed Walk assessment",
+                       tintColor: UIColor.blue,
                         resultResettable: true,
-                        schedule: CarePlanData.dailyScheduleRepeating(occurencesPerDay: 1),
-                        userInfo: ["ORKTask": AssessmentFactory.stepCountAssessment()])
-        
-   //     let timedWalk = OCKCarePlanActivity
-    //        .assessment(withIdentifier: ActivityIdentifer.timedWalk.rawValue, groupIdentifier: nil, title: "Estimate your fall risk", text: "How is your balance", tintColor: UIColor.red, resultResettable: true, schedule: CarePlanData.dailyScheduleRepeating(occurencesPerDay: 1), userInfo: [AssessmentFactory.timedWalkAssessment()])
+                       schedule: CarePlanData.dailyScheduleRepeating(occurencesPerDay: 1),
+                       userInfo: ["ORKTask": AssessmentFactory.stepCountAssessment()])
+        let timedWalkTest = OCKCarePlanActivity
+            .assessment(withIdentifier: ActivityIdentifer.timedWalkTest.rawValue, groupIdentifier: nil, title: "Timed Walk Test", text: "Balance Assessment", tintColor: UIColor.red, resultResettable: true, schedule: CarePlanData.dailyScheduleRepeating(occurencesPerDay: 1), userInfo: ["ORKTask":AssessmentFactory.timedWalkAssessment()])
         
         func add(activity: OCKCarePlanActivity) {
             // 1
@@ -95,7 +95,8 @@ class CarePlanData: NSObject {
         }
         
         super.init()
-        for activity in [exerciseOne, exerciseTwo, exerciseThree, timedwalkActivity] {
+        for activity in [exerciseOne, exerciseTwo, exerciseThree, timedwalkActivity,timedWalkTest] {
             add(activity: activity)
         }    }
+
 }

@@ -55,7 +55,7 @@ class TabBarViewController: UITabBarController {
         viewController.delegate = self
         viewController.progressRingTintColor = UIColor.darkGreen()
         
-        
+        symptomTrackerViewController = viewController
         viewController.tabBarItem = UITabBarItem(title: "Balance Assessment", image: UIImage(named: "barbell"), selectedImage: UIImage.init(named: "barbell.png"))
         viewController.title = "Balance Assessment"
    return UINavigationController(rootViewController: viewController)
