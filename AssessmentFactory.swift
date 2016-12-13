@@ -24,12 +24,8 @@ questionStep.isOptional = false
     //Create an ordered task with a single question
 return ORKOrderedTask(identifier: "Step Count", steps: [questionStep])
     }
+    
   static func timedWalkAssessment() -> ORKTask {
-        return ORKOrderedTask.timedWalk(withIdentifier: "Timed Walk", intendedUseDescription: "Assessment measures balance", distanceInMeters: 5.0, timeLimit: 60, includeAssistiveDeviceForm: true, options: .excludeConclusion)
+       return ORKOrderedTask.shortWalk(withIdentifier: "Short Walk Assessment", intendedUseDescription: "Estimate your fall Risk", numberOfStepsPerLeg: 100, restDuration: 60, options: .excludeHeartRate)
     }
-    //}
-//public var timedWalk: ORKOrderedTask {
-//return ORKOrderedTask.timedWalk(withIdentifier: "Timed Walk", intendedUseDescription: "Assessment measures balance", distanceInMeters: 3, timeLimit: 13, includeAssistiveDeviceForm: true, options: .excludeConclusion)
-
-    }
-
+}

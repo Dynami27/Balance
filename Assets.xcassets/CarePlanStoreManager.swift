@@ -46,6 +46,7 @@ class CarePlanStoreManager: NSObject {
         }
         fatalError("Unexpected task result type")
     }
+    
 
 func updateInsights() {
     InsightsDataManager().updateInsights { (success, insightItems) in

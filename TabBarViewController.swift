@@ -9,6 +9,7 @@
 import UIKit
 import ResearchKit
 import CareKit
+import CoreMotion
 
 class TabBarViewController: UITabBarController {
   
@@ -16,6 +17,8 @@ class TabBarViewController: UITabBarController {
     fileprivate let carePlanData: CarePlanData
     fileprivate var symptomTrackerViewController: OCKSymptomTrackerViewController? = nil
     fileprivate var insightsViewController: OCKInsightsViewController? = nil
+    fileprivate var connectViewController:OCKConnectViewController? = nil
+    fileprivate var insightChart: OCKBarChart? = nil
     
     required init?(coder aDecoder: NSCoder){
         carePlanData = CarePlanData(carePlanStore: carePlanStoreManager.store)
@@ -72,8 +75,8 @@ class TabBarViewController: UITabBarController {
     }
     
     fileprivate func createConnectStack() -> UINavigationController {
-       let viewController = UIViewController()
-        
+     let viewController = OCKConnectViewController(contacts: carePlanData.contacts)
+        viewController.delegate = self
         viewController.tabBarItem = UITabBarItem(title: "Show off", image: UIImage(named: "LikeIt"), selectedImage: UIImage.init(named: "LikeIt"))
         viewController.title = "Show off"
     return UINavigationController(rootViewController: viewController)
@@ -118,6 +121,23 @@ extension TabBarViewController: ORKTaskViewControllerDelegate {
 // MARK: - CarePlanStoreManagerDelegate
 extension TabBarViewController: CarePlanStoreManagerDelegate {
     func carePlanStore(_ store: OCKCarePlanStore, didUpdateInsights insights: [OCKInsightItem]) {
+        if let trainingPlan = (insights.filter { $0.title == "UpRight Training Plan" }.first) {
+            insightChart = trainingPlan as? OCKBarChart
+        }
+        
         insightsViewController?.items = insights
+    }
+}
+// MARK: - OCKConnectViewControllerDelegate
+extension TabBarViewController: OCKConnectViewControllerDelegate {
+    
+    func connectViewController(_ connectViewController: OCKConnectViewController,
+                               didSelectShareButtonFor contact: OCKContact,
+                               presentationSourceView sourceView: UIView?) {
+        let document = carePlanData.generateDocumentWith(chart: insightChart)
+        let activityViewController = UIActivityViewController(activityItems: [document.htmlContent],
+                                                              applicationActivities: nil)
+        
+        present(activityViewController, animated: true, completion: nil)
     }
 }
