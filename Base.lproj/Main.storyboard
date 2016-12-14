@@ -47,10 +47,10 @@
             </objects>
             <point key="canvasLocation" x="746" y="-568"/>
         </scene>
-        <!--Tab Bar View Controller-->
+        <!--Care Plan Tab View Controller-->
         <scene sceneID="380-UF-lrd">
             <objects>
-                <tabBarController id="xjz-bH-UTd" customClass="TabBarViewController" customModule="UpRight_1" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController id="xjz-bH-UTd" customClass="CarePlanTabViewController" customModule="UpRight_1" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="bb1-nK-FWO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>

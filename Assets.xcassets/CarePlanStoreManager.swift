@@ -8,6 +8,7 @@
 
 import CareKit
 import ResearchKit
+import CoreMotion
 
 protocol CarePlanStoreManagerDelegate: class {
     func carePlanStore(_: OCKCarePlanStore, didUpdateInsights insights: [OCKInsightItem])

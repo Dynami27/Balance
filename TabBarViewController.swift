@@ -41,12 +41,14 @@ class TabBarViewController: UITabBarController {
         tabBar.barTintColor = UIColor.lightGreen()
     }
 
+    
     fileprivate func createCareCardStack() -> UINavigationController {
         let viewController = OCKCareCardViewController(carePlanStore: carePlanStoreManager.store)
-        viewController.maskImage = UIImage(named: "firstaid")
+        
+        viewController.maskImage = UIImage(named: "heart")
         viewController.smallMaskImage = UIImage(named: "small-heart")
         viewController.maskImageTintColor = UIColor.red
-        viewController.tabBarItem = UITabBarItem(title: "UpRight Training", image: UIImage(named: "checkmark"), selectedImage: UIImage(named: "checkmark"))
+        viewController.tabBarItem = UITabBarItem(title: "UpRight Training", image: UIImage(named: "StandingMan"), selectedImage: UIImage(named: "StandingMan"))
         viewController.title = "UpRight Training"
         viewController.view.backgroundColor = UIColor.darkYellow()
         return UINavigationController(rootViewController: viewController)
@@ -93,6 +95,7 @@ extension TabBarViewController: OCKSymptomTrackerViewControllerDelegate {
         taskViewController.delegate = self
         
         present(taskViewController, animated: true, completion: nil)
+        
     }
 }
 

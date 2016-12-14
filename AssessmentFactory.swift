@@ -7,12 +7,14 @@
 //
 
 import ResearchKit
+import CoreMotion
 
 struct AssessmentFactory {
     
  static func stepCountAssessment() -> ORKTask {
 let quantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
-let unit = HKUnit(from: "count/min")
+    
+let unit = HKUnit(from: "count")
     let answerFormat = ORKHealthKitQuantityTypeAnswerFormat(quantityType: quantityType, unit: unit, style: .integer)
     
     //Create a question.
@@ -26,6 +28,6 @@ return ORKOrderedTask(identifier: "Step Count", steps: [questionStep])
     }
     
   static func timedWalkAssessment() -> ORKTask {
-       return ORKOrderedTask.shortWalk(withIdentifier: "Short Walk Assessment", intendedUseDescription: "Estimate your fall Risk", numberOfStepsPerLeg: 100, restDuration: 60, options: .excludeHeartRate)
+       return ORKOrderedTask.shortWalk(withIdentifier: "Short Walk Assessment", intendedUseDescription: "Estimate your fall Risk", numberOfStepsPerLeg: 20, restDuration: 60, options: .excludeHeartRate)
     }
-}
+   }

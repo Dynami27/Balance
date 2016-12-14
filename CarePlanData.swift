@@ -17,6 +17,7 @@ enum ActivityIdentifer : String {
   case exerciseThree = "Balance Walk"
   case timedWalk
   case timedWalkTest
+   
     
     }
 
@@ -54,12 +55,18 @@ class CarePlanData: NSObject {
     class func dailyScheduleRepeating(occurencesPerDay: UInt) -> OCKCareSchedule {
         return OCKCareSchedule.dailySchedule(withStartDate: DateComponents.firstDateOfCurrentWeek,
                                              occurrencesPerDay: occurencesPerDay)
+        
+       
     }
+    
+    
     init(carePlanStore: OCKCarePlanStore) {
         self.carePlanStore = carePlanStore
     
         let exerciseone = Bundle.main.path(forResource: "standup", ofType:"png")
         let firstExercise = URL(fileURLWithPath: exerciseone!)
+       // let videoone = Bundle.main.path(forResource:"StandonOneFoot",ofType:"mp4")
+       // let firstVideo = URL(fileURLWithPath: videoone!)
        
        let exercisetwo = Bundle.main.path(forResource: "heeltotoewalk", ofType: "jpg")
         let secondExercise = URL(fileURLWithPath: exercisetwo!)
@@ -67,11 +74,8 @@ class CarePlanData: NSObject {
         let exercisethree = Bundle.main.path(forResource: "balancewalk" , ofType:"jpg")
         let exerciseURL = URL(fileURLWithPath: exercisethree!)
         
-        //let exercisetri = NSURL(fileURLWithPath: exercisethree!)
-        
-        let exerciseOne = OCKCarePlanActivity(identifier: ActivityIdentifer.exerciseOne.rawValue, groupIdentifier:nil, type: .intervention, title:"Stand on one Foot", text: "10-15 reps", tintColor:UIColor.darkOrange(), instructions:"1. Stand on one foot behind a sturdy chair, holding on for balance 2.Hold for 10 seconds 3.Repeat 10-15 times.",imageURL: firstExercise as URL ,schedule:CarePlanData.dailyScheduleRepeating(occurencesPerDay: 3), resultResettable: true, userInfo: nil)
-    
-        
+        let exerciseOne = OCKCarePlanActivity(identifier: ActivityIdentifer.exerciseOne.rawValue, groupIdentifier:nil, type: .intervention, title:"Stand on one Foot", text: "10-15 reps", tintColor:UIColor.darkOrange(), instructions:"1. Stand on one foot behind a sturdy chair, holding on for balance 2.Hold for 10 seconds 3.Repeat 10-15 times.",imageURL: firstExercise as URL,schedule:CarePlanData.dailyScheduleRepeating(occurencesPerDay: 3), resultResettable: true, userInfo: nil)
+      
         
       let exerciseTwo = OCKCarePlanActivity(
         identifier: ActivityIdentifer.exerciseTwo.rawValue,
@@ -86,6 +90,7 @@ class CarePlanData: NSObject {
         resultResettable: true,
         userInfo: nil)
         
+        
         let exerciseThree = OCKCarePlanActivity(
             identifier: ActivityIdentifer.exerciseThree.rawValue,
             groupIdentifier: nil,
@@ -98,6 +103,7 @@ class CarePlanData: NSObject {
             schedule:CarePlanData.dailyScheduleRepeating(occurencesPerDay: 3),
             resultResettable: true,
             userInfo: nil)
+        
        
         let timedwalkActivity = OCKCarePlanActivity
         .assessment(withIdentifier: ActivityIdentifer.timedWalk.rawValue,
@@ -111,6 +117,9 @@ class CarePlanData: NSObject {
        
         let timedWalkTest = OCKCarePlanActivity
             .assessment(withIdentifier: ActivityIdentifer.timedWalkTest.rawValue, groupIdentifier: nil, title: "Timed Walk Test", text: "Balance Assessment", tintColor: UIColor.red, resultResettable: true, schedule: CarePlanData.dailyScheduleRepeating(occurencesPerDay: 1), userInfo: ["ORKTask":AssessmentFactory.timedWalkAssessment()])
+        
+        
+        
         super.init()
         
         for activity in [exerciseOne, exerciseTwo, exerciseThree, timedwalkActivity,timedWalkTest] {
@@ -142,5 +151,8 @@ class CarePlanData: NSObject {
                 
                 return document
             }
-        }
+}
+
+
+
 
