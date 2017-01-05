@@ -48,8 +48,8 @@ class TabBarViewController: UITabBarController {
         viewController.maskImage = UIImage(named: "heart")
         viewController.smallMaskImage = UIImage(named: "small-heart")
         viewController.maskImageTintColor = UIColor.red
-        viewController.tabBarItem = UITabBarItem(title: "UpRight Training", image: UIImage(named: "StandingMan"), selectedImage: UIImage(named: "StandingMan"))
-        viewController.title = "UpRight Training"
+        viewController.tabBarItem = UITabBarItem(title: "Balance Training", image: UIImage(named: "CareCard1.png"), selectedImage: UIImage(named: "CareCardfilled.png"))
+        viewController.title = "Balance Training"
         viewController.view.backgroundColor = UIColor.darkYellow()
         return UINavigationController(rootViewController: viewController)
     }
@@ -79,8 +79,8 @@ class TabBarViewController: UITabBarController {
     fileprivate func createConnectStack() -> UINavigationController {
      let viewController = OCKConnectViewController(contacts: carePlanData.contacts)
         viewController.delegate = self
-        viewController.tabBarItem = UITabBarItem(title: "Show off", image: UIImage(named: "LikeIt"), selectedImage: UIImage.init(named: "LikeIt"))
-        viewController.title = "Show off"
+        viewController.tabBarItem = UITabBarItem(title: "Share", image: UIImage(named: "ConnectOFF"), selectedImage: UIImage.init(named: "ConnectON"))
+        viewController.title = "Share"
     return UINavigationController(rootViewController: viewController)
     }
   }

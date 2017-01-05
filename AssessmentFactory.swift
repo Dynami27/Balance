@@ -19,7 +19,7 @@ let unit = HKUnit(from: "count")
     
     //Create a question.
 let title = "Estimate your fall Risk"
-let text = "This assessment measure how fast you walk to estimate your fall risk. Start from a sitting position stand walk 10 feet turn around and walk back to sitting position"
+let text = "This assessment measure how fast you walk to estimate your fall risk. Start from a sitting position stand walk 10 feet turn around and walk back to sitting position. Do this assessment with whatever assistance device you normally walk with. IMPORTANT NOTE: IF YOU ARE UNSTEADY OR FEEL THAT YOU ARE UNSTEADT DO NOT PERFORM THIS ASSESSEMENT. MAKE SURE YOU ARE ABSOLUTELY SAFE WHEN PERFORM THIS ASSESSMENT"
 let questionStep = ORKQuestionStep(identifier: "Timed Get up and Go", title: title, text: text, answer: answerFormat)
 questionStep.isOptional = false
     

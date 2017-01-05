@@ -15,6 +15,7 @@ enum ActivityIdentifer : String {
   case exerciseOne = "Stand on one foot"
   case exerciseTwo = "Heel to toe walk"
   case exerciseThree = "Balance Walk"
+  case TaiChi = "Tai Chi"
   case timedWalk
   case timedWalkTest
    
@@ -103,7 +104,7 @@ class CarePlanData: NSObject {
             schedule:CarePlanData.dailyScheduleRepeating(occurencesPerDay: 3),
             resultResettable: true,
             userInfo: nil)
-        
+        let taiChi = OCKCarePlanActivity(identifier: ActivityIdentifer.TaiChi.rawValue, groupIdentifier: nil, type: .intervention, title: "Tai Chi", text: "Excellent to improve balance", tintColor: UIColor.green, instructions: "Research shows Tai Chi improves balance and prevents Falls", imageURL: nil, schedule: CarePlanData.dailyScheduleRepeating(occurencesPerDay: 1), resultResettable: true, userInfo: nil)
        
         let timedwalkActivity = OCKCarePlanActivity
         .assessment(withIdentifier: ActivityIdentifer.timedWalk.rawValue,
@@ -122,7 +123,7 @@ class CarePlanData: NSObject {
         
         super.init()
         
-        for activity in [exerciseOne, exerciseTwo, exerciseThree, timedwalkActivity,timedWalkTest] {
+        for activity in [exerciseOne, exerciseTwo, exerciseThree,taiChi, timedwalkActivity,timedWalkTest] {
             add(activity: activity)
         }
     }
